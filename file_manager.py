@@ -25,6 +25,35 @@ class FileManager:
         except Exception as e:
             logger.error(f"Erreur lors de l'écriture dans le fichier {self.file_path}: {e}")
            
-           
-        return []
+           #pour compter nombre de lignes dans le fichier
+    def count_lines(self):
+        
+        try:
+            with open(self.file_path, 'r') as file:
+                lines = file.readlines()
+                count = len(lines)
+                logger.info(f"Le fichier {self.file_path} contient {count} lignes.")
+                return count
+        except FileNotFoundError:
+            logger.error(f"Le fichier {self.file_path} n'existe pas.")
+            return 0
+
+# pour rechercher un mot-clé dans le fichier.
+    def search_keyword(self, keyword):
+        
+        try:
+            with open(self.file_path, 'r') as file:
+                lines = file.readlines()
+                matches = [line for line in lines if keyword in line]
+                if matches:
+                    logger.info(f"Mots-clés '{keyword}' trouvés dans {self.file_path}.")
+                    for match in matches:
+                        print(match.strip())
+                else:
+                    logger.warning(f"Aucun match trouvé pour le mot-clé '{keyword}' dans {self.file_path}.")
+                    print(f"Aucun match trouvé pour le mot-clé '{keyword}'.")
+        except FileNotFoundError:
+            logger.error(f"Le fichier {self.file_path} n'existe pas.")
+
+    
         
