@@ -1,39 +1,46 @@
 from file_manager import FileManager
 
-# Chemin du fichier à manipuler
-file_path = "log.txt"
-
-# Créer une instance de FileManager
-file_manager = FileManager(file_path)
-
-# Menu pour choisir l'action à effectuer
 def afficher_menu():
-    print("\nQue voulez-vous faire ?")
+    print("\n------MENU------ ")
     print("1. Lire le fichier")
     print("2. Écrire dans le fichier")
-    print("3. Quitter")
+    print("3. Compter les lignes")
+    print("4. Rechercher un mot-clé")
+    print("5. Quitter")
 
-# Boucle principale pour interagir avec l'utilisateur
-while True:
+def gerer_choix(file_manager, essais_restants):
+    if essais_restants == 0:
+        print("Nombre maximum de tentatives incorrectes atteint. Fin du programme.")
+        return  # Arrête le programme si les tentatives sont épuisées
+    
     afficher_menu()
-    choix = input("Entrez le numéro de votre choix: ")
+    choix = input("Choisissez une option : ")
 
     if choix == '1':
-        # Lire le fichier
-        print("\nLecture du fichier:")
         file_manager.read_file()
-
     elif choix == '2':
-        # Écrire dans le fichier
-        data = input("Entrez le texte à ajouter au fichier: ")
-        file_manager.write_to_file(data)
-        print(f"Le texte '{data}' a été ajouté au fichier.")
-  
+        contenu = input("Entrez le contenu à écrire : ")
+        file_manager.write_to_file(contenu)
     elif choix == '3':
-        # Quitter le programme
-        print("Au revoir!")
-        break
-
-
+        print(f"Nombre de lignes : {file_manager.count_lines()}")
+    elif choix == '4':
+        keyword = input("Entrez le mot-clé à rechercher : ")
+        file_manager.search_keyword(keyword)
+    elif choix == '5':
+        print("Au revoir !")
+        return  # Quitte la fonction main et termine le programme
     else:
-        print("Choix invalide. Veuillez entrer 1, 2 ou 3 ")
+        essais_restants -= 1  # Décrémente le compteur seulement en cas d’option invalide
+        print(f"Choix invalide. Il vous reste {essais_restants} tentatives.")
+    
+    # Appel récursif pour continuer à interagir avec l'utilisateur
+    gerer_choix(file_manager, essais_restants)
+
+def main():
+    file_path = 'log.txt'  # Chemin vers le fichier log.txt
+    file_manager = FileManager(file_path)
+    essais_restants = 5  # Limite des tentatives pour choix invalide
+    gerer_choix(file_manager, essais_restants)
+
+if __name__ == "__main__":
+    main()
